@@ -1,0 +1,11 @@
+# created by virtualenv automatically
+re.txt
+h.py
+json_checks.pyf.py
+example_response.json
+Fake_news_detection_project.ipynb
+Fake_news_detection.ipynb
+/newsenv
+/.ipynb_checkpoints
+/Server
+/mainserver/dataset

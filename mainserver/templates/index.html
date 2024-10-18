@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Real - Fake news</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static '\images\file.png' %}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        #chart-container {
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .outline-none {
+            outline: none !important;
+            border: none !important;
+        }
+    </style>
+</head>
+
+<body style="background-color: #767676;">
+    {% load humanize %}
+
+    <div style="background-color: #767676;" class="mb-3">
+
+
+        <nav class="navbar bg-body-tertiary bg-dark p-0 shadow-0">
+            <div class="container-fluid bg-primary "
+                style="background-image: url('{% static 'images/animation.gif' %}');background-position: center center;background-repeat: no-repeat;background-size: cover;">
+                <a class="navbar-brand d-flex justify-content-center align-items-center" href="#">
+                    <img src="{% static 'images/file1.png' %}" alt="Logo" style="width: 2.5rem;"
+                        class="d-inline-block align-text-top">
+                    <h3 class="m-2 text-white">Fake New Detector</h3>
+                </a>
+
+                <a href="/">
+                    <i class="bi bi-person-circle fs-1 text-white"></i>
+                </a>
+
+            </div>
+        </nav>
+
+
+        <div class="rounded m-2 px-3 mt-3" style="backdrop-filter: blur(50px);background-color:#bdbcbc;">
+
+
+            <form method="POST" id="forms" action="/">
+                <div class="row h-100 p-2">
+                    <div class="col p-0 m-1">
+                        {% csrf_token %}
+                        <div class="position-relative h-100">
+
+                            <textarea {% if not request.authenticated %} maxlength="500" {% endif %} name="news_text"
+                                required id="textarea" style="min-height:200px;" oninput="CountChar(this)"
+                                class="form-control shadow-lg h-100" cols="100"
+                                placeholder="Paste the news article here...">{% if text %}{{text}}{% endif %}</textarea>
+                            <br>
+                            <span style="position: absolute;bottom: 0%;right: 1%;font-size: 12px;"
+                                id="counts">0/500</span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md shadow m-1 p-2 rounded h-100" style="background-color: #ffffff;">
+
+                        <div class="card bg-transparent border-0">
+                            <img src="{% static 'images/file1.png' %}" width="65px" class="mx-auto" alt="">
+                        </div>
+
+                        <div class="row border-bottom pb-2 my-2">
+                            <div class="col text-center">
+                                <img width="30px" class="mx-2" src="{% static 'images/news.png' %}" alt="">
+                                <label for="fake" class="fs-5">
+                                    Check News
+                                    <input type="radio" name="check" checked id="fake">
+                                </label>
+                            </div>
+                            <div class="col text-center">
+                                <img width="30px" class="mx-2" src="{% static 'images/facts.png' %}" alt="">
+                                <label for="fact" class="fs-5">
+                                    Check Facts
+                                    <input type="radio" name="check" id="fact">
+                                </label>
+                            </div>
+                        </div>
+
+                        <style>
+                            #fakenews[title]:hover::after {
+                            content: attr(title);
+                            position: absolute;
+                            top: -100%;
+                            left: 0;
+                            background-color: red;
+                            }
+                                
+                            
+                        </style>
+
+                        <div class="row my-3">
+                            <div class="col my-1 text-center">
+                                <button type="submit" id="fakenews" title="CTRL + ENTER" class="btn btn-primary w-100 p-0 py-2" style="min-width:200px">
+                                    <img width="30px" class="mx-2" src="{% static 'images/check.png' %}" alt="">
+                                    Check Fake News
+                                </button>
+                            </div>
+                            <div class="col my-1 text-center">
+                                <button type="reset" title="CTRL + Shift + ENTER" onclick="ResetApi()" class="btn btn-secondary w-100"
+                                    style="min-width:200px">
+                                    <img width="30px" class="mx-2" src="{% static 'images/clear.png' %}" alt="">
+                                    Clear Results
+                                </button>
+
+                            </div>
+                        </div>
+
+                        <!-- ----------------------------------------- Analysis Results ------------------------------------------------------------------------------------- -->
+                        {% if result %}
+
+                        <div class="row rounded p-1 d-flex bg-primkary my-2">
+                            <h5 class="mx-1">News Aanlysis</h5>
+                            <div class="col border m-1 rounded">
+                                <p class="mx-2 p-2">Accourding this model the news is categorized as </p>
+                                <p class="w-100 text-center text-bold fs-3"
+                                    style="{% if 'Real' in result %} color:#36a2eb; {% else %}color: #ff6384; {% endif %}">
+                                    {{result}}</p>
+
+                                <div class="text-center">
+
+                                    {% if 'Real' in result %}
+
+                                    <img width="150px" src="{% static 'images/happy.png' %}" alt="">
+
+                                    {% else %}
+                                    <img width="150px" src="{% static 'images/sad.png' %}" alt="">
+
+                                    {% endif %}
+                                </div>
+
+
+                            </div>
+                            <div class="col bg-secondadry border m-1 rounded ">
+
+                                <div
+                                    class="card bg-transparent border-0 d-flex justify-content-center align-items-center p-3">
+
+                                    <div id="chart-container" data-fake="{{fake}}" data-real="{{real}}"
+                                        style="width: 240px;">
+                                        <canvas id="myPieChart"></canvas>
+                                    </div>
+
+                                </div>
+                                <div class="d-flex my-2">
+                                    <div class="col text-center text-white rounded m-1"
+                                        style="background-color: #36a2eb;">Real {{real}}%</div>
+                                    <div class="col text-center text-white rounded m-1"
+                                        style="background-color: #ff6384;">Fake {{fake}}%</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endif %}
+
+
+                    </div>
+                </div>
+
+
+            </form>
+
+           
+        </div>
+    
+        <!---------------------------------------- Feedback Section for the users to send the feedback about the news analysis results --------------------- -->
+        {% if result %}
+          
+        <div class="p-2">
+            <div class="col d-flex justify-content-center align-items-center" style="width: 18rem;">
+                <span class="text-light mx-auto">Feedback for analysis</span>
+
+                <button id="likeButton" onclick="LikeAnalysis(this)" type="button" class="mx-auto btn outline-none">
+                    <i class="text-light bi bi-hand-thumbs-up fs-4"></i>
+                </button>
+
+                <button type="button" onclick="CollapseFun()"  class="mx-auto btn outline-none">
+                    <i class="text-light bi bi-chat-left fs-5" style="pointer-events: all;"></i>
+                </button>
+
+            </div>
+
+            
+
+            <div class="d-none position-relative" id="collapseExample">
+                {% if not request.user.is_authenticated %}
+            
+                    <div class="card card-body bg-transparent border ">
+                        <button onclick="CollapseFun()" class="position-absolute btn outline-none fs-5 text-light" style="right:5px;top:-3px;"><i style="pointer-events: all;" class="bi bi-x-lg"></i></button>
+                        <div class="row">
+                            <div class="col-md-1 m-0 p-0 d-flex justify-content-center align-items-center">
+                                
+                                <div class="card rounded-circle shadow" style="width: 60px; height:60px;padding: 2px;background-color: cyan;">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdWzpBqtVo2jWcUgO9AFkOjZW8J0_rzSt5hA&s" style="width: 100%;height: 100%;" class="rounded-circle" alt="">
+                                </div>
+
+                            </div>
+                            <div class="col m-0 p-0">
+                                <div class="row m-auto text-light"> <u>Monu Saini</u> </div>
+                                <div class="row">
+                                    <form action="#">
+                
+                                        <textarea class="form-control" style="max-height:fit-content" name="comment" id=""></textarea>
+                                        <input class="m-2 btn btn-warning btn-sm" type="submit" value="Send">
+                                        <input class="m-2 btn btn-dark btn-sm" type="reset" value="Clear">
+                                    </form>
+                                        
+                                </div>
+                            </div>
+                        </div>
+
+                    
+                    </div>
+
+                    
+                {% else %}
+
+                    <div class="row" style="width:18rem;">
+                        <div class="col">
+                            <a href="/login" class="btn btn-warning">Log-In</a>
+                        </div>
+                        <div class="col">
+                            <a href="/signup" class="btn btn-warning">Sign-Up</a>
+
+                        </div>
+                    </div>
+
+                {% endif %}
+            </div>
+
+
+
+        </div>
+        {% endif %}
+
+
+        <!-- -------------------------------------------------- Facts about news area ----------------------------------------------------------- -->
+        <div class="p-2 m-2 rounded shadow-lg" style="background-color:#bdbcbc;">
+            {% if facts %}
+            <h3 class="text-primary">👉👉 ({{facts|length}}) Facts for this News 👈👈</h3>
+            {% for item in facts %}
+
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-3 text d-flex justify-content-center align-items-center my-2 rounded">
+                        <!-- <img src="{{item.claim_photo_url}}" class="img-fluid rounded-start" alt="..."> -->
+                        {% if item.claim_photo_url is not null %}
+
+                        <img src="{{item.claim_photo_url}}" class="img-fluid rounded" alt="">
+                        {% else %}
+
+                        <img src="{% static 'images/file.png' %}" style="width: 190px;" class="img-fluid rounded"
+                            alt="">
+
+                        {% endif %}
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <strong class="ml-2">{{item.claimant}}</strong>
+                            </h5>
+                            <p class="card-text">{{item.claim_text}}</p>
+
+                            <div class="row">
+                                <h6>Review for this fact</h6>
+                                <p>{{item.claim_reviews.0.title}}...</p>
+                            </div>
+
+                            <div class="d-flex">
+
+                                <p class="card-text d-inline-block "><small class="text-body-secondary">{{
+                                        item.claim_datetime_utc | naturaltime }}</small></p>
+                                <a style="width: 150px;" target="_" href="{{item.claim_reviews.0.review_link}}"
+                                    class="btn btn-warning mx-auto">Check Review</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-none row m-2 p-2 border rounded">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+
+                            <span class="text-danger">{{ forloop.counter }}.</span>
+                            <strong class="ml-2">{{item.claimant}}</strong>
+                            <p class="m-1"><strong>{{item.claim_text}}</strong></p>
+                            <div class="col">
+                                <div class="card" style="width: 100%;">
+                                    {% if item.claim_photo_url is not null %}
+
+                                    <img src="{{item.claim_photo_url}}" class="w-100 h-100 rounded" alt="">
+                                    {% else %}
+
+                                    <img src="{% static 'images/file.png' %}" style="opacity: 0.3;" class="w-100 h-100"
+                                        alt="">
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            <div class="row my-1 mb-auto">
+                                <strong>Fact Review</strong>
+                                <p>{{item.claim_reviews.0.title}}</p>
+                                <a target="_" href="{{item.claim_reviews.0.review_link}}" class="btn btn-warning"
+                                    style="width: 150px;">Go to Reviews</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+    <div class="m-2 rounded p-3" style="background-color: #605f5f;">
+
+        <div class="row">
+            <div class="col d-flex flex-column justify-content-center">
+                <h3 class="text-light">Discover Real News from Verified Platforms </h3>
+                <p style="color: #dde0e3;">Find News from Trusted Global and Indian Sources</p>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+                <img width="110px" src="{% static 'images/verify.png' %}" alt="">
+            </div>
+        </div>
+
+
+          
+                <div class="container my-3 border-top border-bottom py-3">
+                    <h2 class="text-center text-light">Stay Informed with Trusted News Sources</h2>
+                
+                    <h3 class="mt-4 text-info">Indian News Providers</h3>
+                        <div class="d-flex justify-content-start align-items-center p-2 flex-wrap">
+
+                            <a class="btn btn-light m-auto my-2" href="https://www.thehindu.com" target="_blank">
+                                <img src="https://www.thehindu.com/theme/images/th-online/thehindu-logo.svg" width="150px" alt="">
+                            </a>
+
+                            <a class="btn btn-light m-auto my-2" href="https://www.ndtv.com" target="_blank">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/NDTV_logo.svg/313px-NDTV_logo.svg.png" width="130px" alt="">
+                            </a>
+                            <a class="btn btn-light m-auto my-2" href="https://www.timesofindia.indiatimes.com" target="_blank">
+                                <img src="{% static 'images/toi.png' %}" width="150px" alt="">
+                            </a>
+                            <a class="btn btn-light m-auto my-2" href="https://www.moneycontrol.com" target="_blank">
+                                <img src="{% static 'images/mc.png' %}" width="150px" alt="">
+                            </a>
+
+                        </div>
+                
+                    <h3 class="mt-4 text-warning">Foreign News Providers</h3>
+                    <div class="d-flex justify-content-start align-items-center p-2 flex-wrap">
+
+                            <a class="btn btn-light m-auto my-2" href="https://www.bbc.com" target="_blank">
+                                <img src="{% static 'images/bbc.png' %}" width="150px" alt="">
+
+                            </a>
+                            <a class="btn btn-light m-auto my-2" href="https://www.cnn.com" target="_blank">
+                                <img src="{% static 'images/cnn.png' %}" width="150px" alt="">
+                            </a>
+                            <a class="btn btn-light m-auto my-2" href="https://www.reuters.com" target="_blank">
+                                
+                                <img src="{% static 'images/ru.png' %}" width="150px" alt="">
+                            </a>
+                            <a class="btn btn-light m-auto my-2" href="https://www.theguardian.com" target="_blank">
+                                <img src="{% static 'images/tg.png' %}" width="150px" alt="">
+
+                            </a>
+                            <a class="btn btn-light m-auto my-2" href="https://www.aljazeera.com" target="_blank">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Aljazeera_eng.svg/1200px-Aljazeera_eng.svg.png" width="150px">
+                            </a>
+                    </div>
+                </div>
+                
+        
+
+    </div>
+
+   
+
+
+    <div class="my-3 p-2 d-none" style="background-color: #c9c9c9;">
+
+        <!-- ---------------------------------------- Bottom Area --------------------------------------------------------------- -->
+
+        <hr style="border: 1px solid rgb(189, 189, 189);">
+        <ul class="nav nav-pills m-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">About App</button>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link " id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                    type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Explore Api </button>
+
+
+        <div class="tab-content"  id="pills-tabContent">
+            <style>
+                .about-section {
+                    /* background-color: #817f7f; */
+                    padding: 60px 0;
+                    color: #5e5e5e;
+                }
+
+                .section-title {
+                    font-size: 2.5rem;
+                    margin-bottom: 40px;
+                    font-weight: bold;
+                    color: #5e5e5e;
+                }
+
+                .feature-item {
+                    margin-bottom: 30px;
+                }
+
+                .feature-item h5 {
+                    color: #007bff;
+                    font-weight: bold;
+                }
+
+                .feature-item p {
+                    color: #5e5e5e;
+                }
+            </style>
+
+            <!-- ---------- About Section ------------ -->
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+                tabindex="0">
+                <!-- About Section -->
+                <section class="about-section text-center">
+                    <div class="container">
+                        <h2 class="section-title">About Us</h2>
+                        <p class="lead text-muted">
+                            In today’s fast-paced digital world, misinformation and fake news spread rapidly, causing
+                            confusion and harm to society. Our platform is designed to help individuals, journalists,
+                            and
+                            organizations detect fake news and verify facts quickly and effectively.
+                        </p>
+
+                        <!-- Our Mission -->
+                        <div class="mt-5">
+                            <h3 class="mb-4">Our Mission</h3>
+                            <p class="text-muted">
+                                Our mission is to combat the spread of fake news by providing users with an easy-to-use
+                                tool
+                                that not only predicts the authenticity of news articles but also cross-checks facts to
+                                ensure the reliability of the information being shared.
+                            </p>
+                        </div>
+
+                        <!-- Key Features -->
+                        <div class="row text-start mt-5">
+                            <div class="col-md-6 feature-item">
+                                <h5><i class="bi bi-shield-fill-check"></i> Fake News Detection</h5>
+                                <p>Using advanced machine learning models, our platform analyzes news articles to
+                                    determine
+                                    whether they are likely to be real or fake, helping users make informed decisions.
+                                </p>
+                            </div>
+
+                            <div class="col-md-6 feature-item">
+                                <h5><i class="bi bi-search"></i> Fact-Checking</h5>
+                                <p>We integrate a robust fact-checking feature that verifies the claims in the news
+                                    against
+                                    trustworthy databases, offering users a quick way to confirm the truth behind the
+                                    stories they read.</p>
+                            </div>
+
+                            <div class="col-md-6 feature-item">
+                                <h5><i class="bi bi-ui-checks"></i> User-Friendly Interface</h5>
+                                <p>Our platform is designed with simplicity in mind, ensuring that even non-technical
+                                    users
+                                    can easily input news articles and receive predictions and fact-checking summaries.
+                                </p>
+                            </div>
+
+                            <div class="col-md-6 feature-item">
+                                <h5><i class="bi bi-arrow-repeat"></i> Continuous Improvement</h5>
+                                <p>We are constantly updating our models and tools to adapt to new trends and emerging
+                                    patterns in misinformation, ensuring the most accurate and up-to-date results.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+
+                        <style>
+                            pre {
+                                /* background-color: #343a40; */
+                                color: #5e5e5e;
+                                padding: 15px;
+                                border-radius: 5px;
+                            }
+
+                            .text-param {
+                                color: #17a2b8;
+                            }
+
+                            .text-value {
+                                color: #28a745;
+                            }
+
+                            .text-quotes {
+                                color: #757200;
+                            }
+
+                            .copy-button {
+                                float: right;
+                            }
+
+                            .api-endpoint {
+                                /* background-color: #007bff; */
+                                color: #5e5e5e;
+                                padding: 10px;
+                                border-radius: 5px;
+                            }
+                        </style>
+
+                    </div>
+
+                </section>
+            </div>
+
+            <!-- ---------- API Section ------------ -->
+            <div class="tab-pane fade " id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                tabindex="0">
+
+
+                <div class="container mt-5">
+                    <h1 class="mb-4">Fake News Detection API Documentation</h1>
+
+                    <h2 class="mt-4">Request Format</h2>
+                    <p>Use the following format to send a request to the Fake News Detection API:</p>
+                    <pre id="request-example">
+
+                            <button class="btn btn-secondary btn-sm copy-button" onclick="copyToClipboard('#request-example',this)">Copy</button>
+                        {
+                        <span class="text-quotes">"text"</span>: <span class="text-quotes">"Your news content here"</span>
+                        }
+                        </pre>
+
+
+                    <h3 class="mt-4">Parameters</h3>
+                    <ul>
+                            The
+
+                    <h2 class="mt-4">Response Format</h2>
+                    <p>The API returns a JSON response with the following structure:</p>
+                    <button class="btn btn-secondary btn-sm copy-button"
+                        onclick="copyToClipboard('#response-example',this)">Copy</button>
+                    <pre id="response-example">
+                        {
+                        <span class="text-quotes">"text"</span>: <span class="text-quotes">"Your news content here"</span>,
+                        <span class="text-quotes">"prediction"</span>: <span class="text-value">"Real"</span> or <span class="text-value">"Fake"</span>,
+                        <span class="text-quotes">"confidence"</span>: <span class="text-value">0.97</span>,
+                        <span class="text-quotes">"facts_checked"</span>: <span class="text-quotes">"Facts information here"</span>
+                        }
+                        </pre>
+
+
+                    <h3 class="mt-4">Response Fields</h3>
+                    <ul>
+                            The
+                            The result of the fake news detection. Either <span class="text-value">"Real"</span>
+                            Any fact-checked information related to
+                            the
+
+                    <h2 class="mt-4">Example Request <button class="btn btn-secondary copy-button btn-sm mb-2"
+                            onclick="copyToClipboard('#example-request',this)">Copy</button></h2>
+
+                    <div class="m-1">
+                        <pre id="example-request">curl -X POST "http://127.0.0.1:8000/api/predict/" -H "Content-Type: application/json" -d '
+                    {
+                        <span class="text-quotes">"text"</span> <span class="text-quotes">"Breaking news content..."</span>
+                    }'
+                                                </pre>
+                    </div>
+
+
+                    <h2 class="mt-4">Example Response <button class="btn btn-secondary btn-sm copy-button"
+                            onclick="copyToClipboard('#example-response',this)">Copy</button></h2>
+                    <pre id="example-response">
+                        {
+                        <span class="text-quotes">"text"</span>: <span class="text-quotes">"Breaking news content..."</span>,
+                        <span class="text-quotes">"prediction"</span>: <span class="text-value">"Fake"</span>,
+                        <span class="text-quotes">"confidence"</span>: <span class="text-value">0.89</span>,
+                        <span class="text-quotes">"facts_checked"</span>: <span class="text-quotes">"Fact-check details here..."</span>
+                        }
+                        </pre>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+<footer class="bg-dark text-light pt-5 pb-4">
+    <div class="container">
+        <div class="row">
+            <!-- Site Navigation Links -->
+            <div class="col-md-4">
+                <h5>Navigation</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#about" class="text-light">About</a></li>
+                    <li><a href="#features" class="text-light">Features</a></li>
+                    <li><a href="#how-it-works" class="text-light">How It Works</a></li>
+                    <li><a href="#fact-check" class="text-light">Fact-Checking</a></li>
+                    <li><a href="#contact" class="text-light">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Help and Support Links in Columns -->
+            <div class="col-md-4">
+                <h5>Help & Support</h5>
+                <div class="row">
+                    <div class="col">
+                        <ul class="list-unstyled">
+                            <li><a href="#faq" class="text-light">FAQs</a></li>
+                            <li><a href="#support" class="text-light">Help Center</a></li>
+                            <li><a href="#guide" class="text-light">User Guide</a></li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <ul class="list-unstyled">
+                            <li><a href="#terms" class="text-light">Terms of Service</a></li>
+                            <li><a href="#privacy" class="text-light">Privacy Policy</a></li>
+                            <li><a href="#report" class="text-light">Report an Issue</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="col-md-4">
+                <h5>Search the Site</h5>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-danger" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <hr class="bg-light">
+
+        <!-- Copyright and Terms -->
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; 2024 Fake News Detection System</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="#terms" class="text-light me-2">Terms of Service</a>
+                <a href="#privacy" class="text-light">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data for Fake and Real news
+        let a = 0
+        function CollapseFun(obj){
+            const collapseExample = document.getElementById('collapseExample');
+            collapseExample.classList.toggle('d-none')
+        }
+
+        let like = 0;
+        function LikeAnalysis(obj){
+            let likeButton = document.getElementById("likeButton");
+
+            likeButton = likeButton.firstElementChild;
+
+
+            if(like==0){
+                likeButton.classList.replace('bi-hand-thumbs-up','bi-hand-thumbs-up-fill')
+                // obj.classList.add('')
+                like = 1;
+            }
+            else{
+                likeButton.classList.replace('bi-hand-thumbs-up-fill','bi-hand-thumbs-up')
+
+                like = 0;
+
+            }
+
+        }
+
+        window.onload = (e) => {
+            try {
+
+                const chart_container = document.getElementById("chart-container");
+                fakeValue = chart_container.dataset.fake;
+                realValue = chart_container.dataset.real;
+
+                piChart(fakeValue, realValue)
+            }
+            catch (e) {
+                console.log(e)
+            }
+        }
+
+        function piChart(fakeValue, realValue) {
+
+            // Pie chart configuration
+            const ctx = document.getElementById('myPieChart').getContext('2d');
+            const myPieChart = new Chart(ctx, {
+
+                type: 'pie',
+                data: {
+                    labels: ['Fake', 'Real'],
+                    datasets: [{
+                        data: [fakeValue, realValue],
+                        backgroundColor: ['#ff6384', '#36a2eb'],
+                        hoverBackgroundColor: ['#ff3b5c', '#3398da']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+
+
+
+    </script>
+
+    <script>
+        function CountChar(obj) {
+            let counts = document.getElementById('counts');
+            let textarea = document.getElementById('textarea');
+
+            counts.innerText = textarea.value.length + "/500"
+
+
+        }
+
+        function ResetApi() {
+            document.getElementById('textarea').innerText = '';
+            document.getElementById('donutChart').style.display = 'none';
+            document.getElementById('result').innerText = '';
+        }
+
+    </script>
+
+
+
+
+</body>
+
+</html>

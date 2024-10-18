@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <style>
+        .hero-section {
+            background-image: url('https://example.com/hero-image.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+        }
+
+        .hero-text {
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 50px;
+        }
+
+        .about-image {
+            width: 100%;
+            height: auto;
+        }
+
+        .content-section {
+            padding: 50px 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .img-center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero-section"style="background-image:url(https://static.toiimg.com/photo/msid-93095547/93095547.jpg?pl=604458)">
+        <div class="container" >
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hero-text">
+                        <h1 class="text-dark">Welcome to Our News Verification Platform</h1>
+                        <p class="lead text-dark">Ensuring Truth, Detecting Fake News, and Providing Accurate Information</p>
+                        <a href="#about" class="btn btn-primary btn-lg">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- About Section -->
+    <section id="about" class="content-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>About Our Platform</h2>
+                    <p>
+                        Our platform is designed to help users verify news authenticity using cutting-edge machine learning
+                        models. Whether it's detecting fake news or providing real-time fact-checking, we aim to empower users
+                        with accurate information in the digital world.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://example.com/about-image.jpg" alt="About" class="about-image img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features Section -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-lg-12">
+                    <h2>Key Features</h2>
+                    <p class="lead">Our platform offers the following features to ensure reliability and ease of use:</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 text-center">
+                    <i class="bi bi-check-circle feature-icon"></i>
+                    <h3>Fake News Detection</h3>
+                    <p>
+                        Our powerful ML models identify and flag potential fake news with high accuracy, ensuring you stay informed.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="bi bi-shield-lock feature-icon"></i>
+                    <h3>Fact Checking</h3>
+                    <p>
+                        With integrated fact-checking APIs, our platform cross-references data to provide real-time validation of the news.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="bi bi-bar-chart feature-icon"></i>
+                    <h3>Simple User Interface</h3>
+                    <p>
+                        Navigate through a user-friendly interface that provides detailed news analysis at your fingertips.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-lg-12">
+                    <h2>How It Works</h2>
+                    <p class="lead">Our platform operates in 3 easy steps:</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 text-center">
+                    <img src="{% static 'images/news.jpg' %}" alt="Upload" class="img-fluid img-center">
+                    <h4>Step 1: Upload News</h4>
+                    <p>Enter the news content that you want to verify.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <img src="{% static 'images/analyze.gif' %}" alt="Analyze" class="img-fluid img-center">
+                    <h4>Step 2: Analyze</h4>
+                    <p>Our machine learning model analyzes the text for authenticity.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <img src="https://example.com/result-image.jpg" alt="Result" class="img-fluid img-center">
+                    <h4>Step 3: Get Results</h4>
+                    <p>Receive real-time feedback on whether the news is real or fake.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center p-3 bg-dark text-white">
+        <p>&copy; 2024 News Verification Platform. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>
