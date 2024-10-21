@@ -100,27 +100,28 @@ The fact-checking feature uses an external API to:
 
 ## 🏃 How to Run <a name="how-to-run"></a>
 
-### Prerequisites:
-- Python 3.x
-- Required Python libraries (install via `requirements.txt`):
-  ```bash
-  pip install -r requirements.txt
-  ```
-
 ### Running the Application:
+  - Python 3.9
+
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/fake-news-detection.git
+   https://github.com/Tech2Saini/FakeNewsDetection.git
    ```
 2. Navigate to the project directory:
    ```bash
    cd fake-news-detection
    ```
-3. Run the Flask app:
+3. Prerequisites:
+  - Required Python libraries (install via `requirements.txt`):
+    ```bash
+    pip install -r requirements.txt
+    ```
+  
+4. Run the Flask app:
    ```bash
    python app.py
    ```
-4. Access the application on `http://127.0.0.1:5000/` in your browser.
+5. Access the application on `http://127.0.0.1:5000/` in your browser.
 
 ---
 
