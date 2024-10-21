@@ -1,7 +1,7 @@
 # 📰 Fake News Detection and Fact-Checking System
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg?style=flat-square&logo=python)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![License: MIT](LICENSE)
 
 A machine learning-based system that detects fake news and checks the factual correctness of news content using external APIs and datasets. This project aims to enhance media reliability by leveraging cutting-edge AI techniques.
 
