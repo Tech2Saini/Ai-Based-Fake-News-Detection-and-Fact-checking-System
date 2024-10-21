@@ -119,9 +119,9 @@ The fact-checking feature uses an external API to:
   
 4. Run the Flask app:
    ```bash
-   python app.py
+   python manage.py runserver
    ```
-5. Access the application on `http://127.0.0.1:5000/` in your browser.
+5. Access the application on `http://127.0.0.1:8000/` in your browser.
 
 ---
 
@@ -145,5 +145,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 💬 Contact
 
 For any queries or suggestions, feel free to reach out:
-- **Email:** [monusainideveloper@gmail.com](mailto:monusainideveloper@gmail.com)
 - **LinkedIn:** [Monu Saini](https://www.linkedin.com/in/monupydev)
