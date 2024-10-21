@@ -46,7 +46,7 @@ In today's world, fake news spreads rapidly across digital platforms, creating m
 
 - **Programming Language:** Python
 - **Machine Learning:** Scikit-learn, TensorFlow
-- **Web Framework:** Flask
+- **Web Framework:** Django
 - **Database:** SQLite for storage of user-submitted news articles
 - **Frontend:** HTML5, CSS3, Bootstrap
 - **APIs:** External Fact-Checking API
