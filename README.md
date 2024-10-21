@@ -136,13 +136,14 @@ We welcome contributions to this project! Feel free to:
 
 ---
 
-## 📜 License <a name="license"></a>
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 💬 Contact
 
 For any queries or suggestions, feel free to reach out:
 - **LinkedIn:** [Monu Saini](https://www.linkedin.com/in/monupydev)
+
+---
+
+## 📜 License <a name="license"></a>
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
