@@ -1,7 +1,3 @@
-To beautify the `README.md` file for your GitHub project, we can organize the content effectively, add some Markdown styling, and include sections that clearly explain your project. Here's a well-structured and visually appealing template for your *Fake News Detection and Fact-Checking System* project:
-
----
-
 # 📰 Fake News Detection and Fact-Checking System
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg?style=flat-square&logo=python)](https://www.python.org/)
@@ -150,7 +146,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any queries or suggestions, feel free to reach out:
 - **Email:** [monusainideveloper@gmail.com](mailto:monusainideveloper@gmail.com)
 - **LinkedIn:** [Monu Saini](https://www.linkedin.com/in/monupydev)
-
----
-
-This format will make your `README.md` file clear, professional, and easy to navigate for potential collaborators and users. Let me know if you'd like any changes!
