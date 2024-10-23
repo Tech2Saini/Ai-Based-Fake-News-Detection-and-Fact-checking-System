@@ -1,7 +1,7 @@
 # 📰 Fake News Detection and Fact-Checking System
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg?style=flat-square&logo=python)](https://www.python.org/)
-[![License](https://github.com/Tech2Saini/FakeNewsDetection/blob/main/LICENSE)]
+[![License](https://camo.githubusercontent.com/45935c9a34bb28fab00fa80654a3c800e2d34814e4e52188e0c00b2becf83bc3/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d425344253230322d2d436c617573652d6f72616e67652e737667)]
 
 
 
