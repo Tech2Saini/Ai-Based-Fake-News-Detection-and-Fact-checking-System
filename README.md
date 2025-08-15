@@ -1,4 +1,4 @@
-# **Fake News Detection and Fact-Checking System**  
+# **Ai/Ml Soluton Fake News Detection and Fact-Checking System**  
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)  
@@ -38,7 +38,7 @@
 ### **1️⃣ Clone the Repository**  
 ```sh
 git clone https://github.com/Tech2Saini/Ai-Based-Fake-News-Detection-and-Fact-checking-System.git
-cdAi-Based-Fake-News-Detection-and-Fact-checking-System
+cd Ai-Based-Fake-News-Detection-and-Fact-checking-System
 ```
 
 ### **2️⃣ Set Up Virtual Environment**  
