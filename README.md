@@ -1,4 +1,4 @@
-# **Ai/Ml Soluton Fake News Detection and Fact-Checking System**  
+# **Ai-Ml Soluton Fake News Detection and Fact-Checking System**  
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)  
@@ -84,23 +84,6 @@ python manage.py runserver
 - **Feature Engineering:** TF-IDF, N-grams, Word Embeddings  
 - **Accuracy:** 94% on test data  
 - **Training Time:** ~5 minutes on GPU  
-
----
-
-## 📌 **Future Improvements**  
-
-✅ Expand dataset for multilingual support  
-✅ Real-time fact verification from multiple sources  
-✅ Advanced deep learning models for better accuracy  
-
----
-
-## 👨‍💻 **Contributors**  
-
-🔹 **Monu Saini** – Project Lead & Full-Stack Development  
-🔹 **Mohd Suhail** – UI/UX & Frontend Development  
-🔹 **Mohammad Tauheed** – Backend & API Integration  
-🔹 **Mohammad Zaid** – Machine Learning & Data Processing  
 
 ---
 
