@@ -7,6 +7,9 @@
 
 🚀 **A machine learning-based web application for detecting fake news and fact-checking information using advanced AI models.**  
 
+> ⚠️ Note: This is a **case study repository**. Core implementation code has been hide for security/privacy reasons. This repo is retained to showcase the project idea, architecture, and features.
+
+
 ## 🔥 **Features & Integrations**  
 
 ✔ **Fake News Detection** – AI-powered model trained with NLP and XGBoost  
