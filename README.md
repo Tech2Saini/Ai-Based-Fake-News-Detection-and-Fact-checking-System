@@ -37,8 +37,8 @@
 
 ### **1️⃣ Clone the Repository**  
 ```sh
-git clone https://github.com/yourusername/Fake-News-Detection.git
-cd Fake-News-Detection
+git clone https://github.com/Tech2Saini/Ai-Based-Fake-News-Detection-and-Fact-checking-System.git
+cdAi-Based-Fake-News-Detection-and-Fact-checking-System
 ```
 
 ### **2️⃣ Set Up Virtual Environment**  
